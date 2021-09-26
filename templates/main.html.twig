@@ -1,0 +1,24 @@
+{% extends "main/base.html.twig" %}
+
+{% block body %}
+    <form action="">
+        <div class="row">
+            <div class="col">
+                <select name="station_from" id="station_from" class="form-control">
+                    <option value="" disabled selected>Откуда</option>
+                </select>
+            </div>
+            <div class="col">
+
+                <select name="station_to" id="station_to" class="form-control">
+                    <option value="" disabled selected>Куда</option>
+                </select>
+            </div>
+            <div class="col">
+                <button class="btn btn-block btn-primary">Найти</button>
+            </div>
+        </div>
+    </form>
+{% endblock %}
+
+{% block title %}Главная страница{% endblock %}
