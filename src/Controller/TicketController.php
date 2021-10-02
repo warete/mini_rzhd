@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Station;
+use App\Entity\Train;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,19 +22,6 @@ class TicketController extends AbstractController
 
 		$stations = $entityManager->getRepository(Station::class)
 			->findAll();
-
-		/*$stationFrom = $entityManager->getRepository(Station::class)->find(1);
-		$stationTo = $entityManager->getRepository(Station::class)->find(5);
-
-		$route = (new \App\Entity\Route())
-			->setStationFrom($stationFrom)
-			->setStationTo($stationTo)
-			->setPrice(3499)
-			->setDateStart(new \DateTime())
-			->setDateEnd(new \DateTime());
-		$entityManager->persist($route);
-		$entityManager->flush();
-		die();*/
 
 		$routes = [];
 		if ($request->get('station_from') && $request->get('station_to'))
