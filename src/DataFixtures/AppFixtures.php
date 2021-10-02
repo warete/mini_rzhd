@@ -12,14 +12,14 @@ class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager)
     {
-    	$stations = [];
+		$stations = [];
 		foreach ([
-			'Волгоград 1',
-			'Москва Павелецкая',
-			'Москва Киевская',
-			'Москва Курская',
-			'Санкт-Петербург Главный'
-		 ] as $stationName)
+					 'Волгоград 1',
+					 'Москва Павелецкая',
+					 'Москва Киевская',
+					 'Москва Курская',
+					 'Санкт-Петербург Главный'
+				 ] as $stationName)
 		{
 			$station = new Station();
 			$station->setName($stationName);
@@ -53,7 +53,7 @@ class AppFixtures extends Fixture
 						->setDateStart((new \DateTime())->modify(sprintf('-% days', random_int(0, 10))))
 						->setDateEnd((new \DateTime())->modify(sprintf('+% days', random_int(0, 10))));
 					$trainIndexStart = random_int(0, count($stations) - 1);
-					for ($k = $trainIndexStart; $k < $trainIndexStart; $k++)
+					for ($k = $trainIndexStart; $k < $trainIndexStart + 5; $k++)
 					{
 						$route->addTrain($trains[$k]);
 					}
