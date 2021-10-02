@@ -6,11 +6,13 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  */
-class User
+class User implements UserInterface
 {
     /**
      * @ORM\Id
@@ -20,98 +22,186 @@ class User
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=180, unique=true)
      */
-    private $name;
+    private $email;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="json")
      */
-    private $last_name;
+    private $roles = [];
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $second_name;
+	/**
+	 * @ORM\Column(type="string", length=255)
+	 */
+	private $name;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Ticket::class, mappedBy="user")
-     */
-    private $tickets;
+	/**
+	 * @ORM\Column(type="string", length=255)
+	 */
+	private $last_name;
 
-    public function __construct()
-    {
-        $this->tickets = new ArrayCollection();
-    }
+	/**
+	 * @ORM\Column(type="string", length=255, nullable=true)
+	 */
+	private $second_name;
+
+	/**
+	 * @ORM\OneToMany(targetEntity=Ticket::class, mappedBy="user")
+	 */
+	private $tickets;
+
+	public function __construct()
+	{
+		$this->tickets = new ArrayCollection();
+	}
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getEmail(): ?string
     {
-        return $this->name;
+        return $this->email;
     }
 
-    public function setName(string $name): self
+    public function setEmail(string $email): self
     {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    public function getLastName(): ?string
-    {
-        return $this->last_name;
-    }
-
-    public function setLastName(string $last_name): self
-    {
-        $this->last_name = $last_name;
-
-        return $this;
-    }
-
-    public function getSecondName(): ?string
-    {
-        return $this->second_name;
-    }
-
-    public function setSecondName(?string $second_name): self
-    {
-        $this->second_name = $second_name;
+        $this->email = $email;
 
         return $this;
     }
 
     /**
-     * @return Collection|Ticket[]
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
      */
-    public function getTickets(): Collection
+    public function getUserIdentifier(): string
     {
-        return $this->tickets;
+        return (string) $this->email;
     }
 
-    public function addTicket(Ticket $ticket): self
+    /**
+     * @deprecated since Symfony 5.3, use getUserIdentifier instead
+     */
+    public function getUsername(): string
     {
-        if (!$this->tickets->contains($ticket)) {
-            $this->tickets[] = $ticket;
-            $ticket->setUser($this);
-        }
+        return (string) $this->email;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
 
         return $this;
     }
 
-    public function removeTicket(Ticket $ticket): self
+    /**
+     * This method can be removed in Symfony 6.0 - is not needed for apps that do not check user passwords.
+     *
+     * @see PasswordAuthenticatedUserInterface
+     */
+    public function getPassword(): ?string
     {
-        if ($this->tickets->removeElement($ticket)) {
-            // set the owning side to null (unless already changed)
-            if ($ticket->getUser() === $this) {
-                $ticket->setUser(null);
-            }
-        }
-
-        return $this;
+        return null;
     }
+
+    /**
+     * This method can be removed in Symfony 6.0 - is not needed for apps that do not check user passwords.
+     *
+     * @see UserInterface
+     */
+    public function getSalt(): ?string
+    {
+        return null;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials()
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
+    }
+
+	public function getName(): ?string
+	{
+		return $this->name;
+	}
+
+	public function setName(string $name): self
+	{
+		$this->name = $name;
+
+		return $this;
+	}
+
+	public function getLastName(): ?string
+	{
+		return $this->last_name;
+	}
+
+	public function setLastName(string $last_name): self
+	{
+		$this->last_name = $last_name;
+
+		return $this;
+	}
+
+	public function getSecondName(): ?string
+	{
+		return $this->second_name;
+	}
+
+	public function setSecondName(?string $second_name): self
+	{
+		$this->second_name = $second_name;
+
+		return $this;
+	}
+
+	/**
+	 * @return Collection|Ticket[]
+	 */
+	public function getTickets(): Collection
+	{
+		return $this->tickets;
+	}
+
+	public function addTicket(Ticket $ticket): self
+	{
+		if (!$this->tickets->contains($ticket)) {
+			$this->tickets[] = $ticket;
+			$ticket->setUser($this);
+		}
+
+		return $this;
+	}
+
+	public function removeTicket(Ticket $ticket): self
+	{
+		if ($this->tickets->removeElement($ticket)) {
+			// set the owning side to null (unless already changed)
+			if ($ticket->getUser() === $this) {
+				$ticket->setUser(null);
+			}
+		}
+
+		return $this;
+	}
 }
