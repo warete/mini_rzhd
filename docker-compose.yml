@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+#  db:
+#    image: mysql:5.7
+#    ports:
+#      - 3406:3306
+#    environment:
+#      - MYSQL_USER=bitrix
+#      - MYSQL_PASSWORD=password
+#      - MYSQL_DATABASE=bitrix
+#      - MYSQL_ROOT_PASSWORD=password2
+#    healthcheck:
+#      test: ["CMD", "mysqladmin", "--user=root", "--password=", "--host=127.0.0.1", "ping", "--silent"]
+#      interval: 2s
+#      timeout: 10s
+#      retries: 10
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "7005:8080"
+    volumes:
+      - .:/app:delegated
+#    depends_on:
+#      - db
+    command: bash backend_start.sh
+  npm:
+    image: node:14.17.3
+    volumes:
+      - ./:/var/www/html
+    working_dir: /var/www/html
+    command: bash frontend_start.sh
