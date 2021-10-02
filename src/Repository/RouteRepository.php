@@ -55,7 +55,7 @@ class RouteRepository extends ServiceEntityRepository
 	 */
 	public function findByStationsInDates(int $stationFromId, int $stationToId, $dateFrom, $dateEnd)
 	{
-		return $this->createQueryBuilder('r')
+		$result = $this->createQueryBuilder('r')
 			->where('r.station_from = :station_from')
 			->andWhere('r.station_to = :station_to')
 			->andWhere('r.date_start >= :date_start')
@@ -66,5 +66,13 @@ class RouteRepository extends ServiceEntityRepository
 			->setParameter('date_end', $dateEnd)
 			->getQuery()
 			->getResult();
+
+		/** @var Route $item */
+		foreach ($result as $item)
+		{
+			$item->calcMaxSeatsCnt();
+		}
+
+		return $result;
 	}
 }

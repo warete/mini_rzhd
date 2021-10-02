@@ -51,6 +51,9 @@ class Route
      */
     private $trains;
 
+    /** @var int  */
+    private $maxSeatsCnt = 0;
+
     public function __construct()
     {
         $this->trains = new ArrayCollection();
@@ -154,4 +157,21 @@ class Route
 
         return $this;
     }
+
+	/**
+	 * @return int
+	 */
+    public function getMaxSeatsCnt(): int
+	{
+		return $this->maxSeatsCnt;
+	}
+
+	public function calcMaxSeatsCnt(): void
+	{
+		/** @var Train $train */
+		foreach ($this->trains as $train)
+		{
+			$this->maxSeatsCnt += $train->getMaxSeatsCnt();
+		}
+	}
 }
