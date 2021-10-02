@@ -44,7 +44,7 @@
         </div>
     </form>
     {% for route in routes %}
-        <div class="card">
+        <div class="card mb-3">
             <div class="card-body">
                 <div class="row">
                     <div class="col">
@@ -70,8 +70,15 @@
                         </svg>
                         {{ route.getDateEndString() }}
                     </div>
+                    <div class="col-3">
+                        Свободно мест <span class="{% if route.getMaxSeatsCnt() - route.getTickets()|length > 0 %}text-success{% else %}text-danger{% endif %}">
+                            <strong>{{ route.getMaxSeatsCnt() - route.getTickets()|length }}</strong> из <strong>{{ route.getMaxSeatsCnt() }}</strong>
+                        </span>
+                    </div>
                     <div class="col">
-                        <a href="#" class="btn btn-primary flex-right">Подробнее</a>
+                        {% if route.getMaxSeatsCnt() - route.getTickets()|length > 0 %}
+                            <a href="#" class="btn btn-primary flex-right">Купить билет</a>
+                        {% endif %}
                     </div>
                 </div>
             </div>
