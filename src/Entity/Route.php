@@ -54,9 +54,15 @@ class Route
     /** @var int  */
     private $maxSeatsCnt = 0;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Ticket::class, mappedBy="route")
+     */
+    private $tickets;
+
     public function __construct()
     {
         $this->trains = new ArrayCollection();
+        $this->tickets = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -174,4 +180,34 @@ class Route
 			$this->maxSeatsCnt += $train->getMaxSeatsCnt();
 		}
 	}
+
+    /**
+     * @return Collection|Ticket[]
+     */
+    public function getTickets(): Collection
+    {
+        return $this->tickets;
+    }
+
+    public function addTicket(Ticket $ticket): self
+    {
+        if (!$this->tickets->contains($ticket)) {
+            $this->tickets[] = $ticket;
+            $ticket->setRoute($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTicket(Ticket $ticket): self
+    {
+        if ($this->tickets->removeElement($ticket)) {
+            // set the owning side to null (unless already changed)
+            if ($ticket->getRoute() === $this) {
+                $ticket->setRoute(null);
+            }
+        }
+
+        return $this;
+    }
 }
