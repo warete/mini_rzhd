@@ -100,9 +100,6 @@
     "friendsofphp/proxy-manager-lts": {
         "version": "v1.0.5"
     },
-    "fzaninotto/faker": {
-        "version": "v1.5.0"
-    },
     "laminas/laminas-code": {
         "version": "4.4.3"
     },
@@ -242,9 +239,6 @@
     "symfony/options-resolver": {
         "version": "5.4.x-dev"
     },
-    "symfony/password-hasher": {
-        "version": "5.4.x-dev"
-    },
     "symfony/polyfill-intl-grapheme": {
         "version": "v1.23.1"
     },
@@ -289,30 +283,6 @@
         ]
     },
     "symfony/runtime": {
-        "version": "5.4.x-dev"
-    },
-    "symfony/security-bundle": {
-        "version": "5.3",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "master",
-            "version": "5.3",
-            "ref": "9c4fcf79873f7400c885b90935f7163233615d6f"
-        },
-        "files": [
-            "config/packages/security.yaml"
-        ]
-    },
-    "symfony/security-core": {
-        "version": "5.4.x-dev"
-    },
-    "symfony/security-csrf": {
-        "version": "5.4.x-dev"
-    },
-    "symfony/security-guard": {
-        "version": "5.4.x-dev"
-    },
-    "symfony/security-http": {
         "version": "5.4.x-dev"
     },
     "symfony/service-contracts": {
